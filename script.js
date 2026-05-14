@@ -1,20 +1,7 @@
 // ══════════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════════
-let products = [
-  { id: 1, name: 'Sérum Hidratante Intenso', price: 120, cat: 'seca', emoji: '❋', desc: 'Ácido hialurónico + aloe vera para hidratación profunda de 72h.', extraDesc: 'Aplicar 2-3 gotas sobre el rostro limpio. Ideal para uso nocturno.', stock: 45, badge: 'Bestseller', img: 'img/A1.png' },
-  { id: 2, name: 'Crema Nutritiva de Argán', price: 165, cat: 'seca', emoji: '❀', desc: 'Aceite de argán puro con manteca de karité para nutrir pieles secas.', extraDesc: 'Rica en vitamina E y ácidos grasos esenciales.', stock: 30, img: 'img/2.png' },
-  { id: 3, name: 'Sérum Control Sebo', price: 110, cat: 'grasa', emoji: '❀', desc: 'Niacinamida + zinc para regular el exceso de grasa y minimizar poros.', extraDesc: 'Fórmula ligera de rápida absorción. Libre de aceites.', stock: 60, badge: 'Nuevo', img: 'img/3.png' },
-  { id: 4, name: 'Tónico Poros Invisibles', price: 95, cat: 'grasa', emoji: '✦', desc: 'Ácido salicílico natural + té verde para piel fresca y sin brillo.', extraDesc: 'Aplicar con algodón por las mañanas.', stock: 40, img: 'img/4.png' },
-  { id: 5, name: 'Crema Equilibrante', price: 130, cat: 'mixta', emoji: '◈', desc: 'Fórmula bifásica que hidrata zonas secas y controla la zona T.', extraDesc: 'Para mejores resultados, usar mañana y noche.', stock: 25, img: 'img/5.png' },
-  { id: 6, name: 'Mascarilla Purificante', price: 85, cat: 'mixta', emoji: '❧', desc: 'Arcilla kaolín + carbón activado para limpieza profunda semanal.', extraDesc: 'Aplicar 1-2 veces por semana durante 10 minutos.', stock: 55, img: 'img/6.png' },
-  { id: 7, name: 'Sérum Calmante de Rosa', price: 155, cat: 'sensible', emoji: '✿', desc: 'Rosa mosqueta + centella asiática para pieles reactivas.', extraDesc: 'Sin fragancia, sin colorantes. Dermatológicamente probado.', stock: 20, badge: 'Favorito', img: 'img/7.png' },
-  { id: 8, name: 'Crema Barrera Protectora', price: 140, cat: 'sensible', emoji: '◆', desc: 'Ceramidas + péptidos para reforzar la barrera cutánea natural.', extraDesc: 'Especial para pieles post-tratamiento.', stock: 35, img: 'img/8.png' },
-  { id: 9, name: 'Retinol Suave Nocturno', price: 175, cat: 'madura', emoji: '☾', desc: 'Retinol encapsulado 0.3% + vitamina E para regenerar mientras duermes.', extraDesc: 'Usar solo de noche. Aplicar protector solar al día siguiente.', stock: 18, badge: 'Premium', img: 'img/9.png' },
-  { id: 10, name: 'Crema Antioxidante Lumière', price: 195, cat: 'madura', emoji: '✦', desc: 'Vitamina C estabilizada + resveratrol para luminosidad y firmeza.', extraDesc: 'Protege contra radicales libres y polución ambiental.', stock: 22, img: 'img/10.png' },
-  { id: 11, name: 'Aceite Facial de Jojoba', price: 90, cat: 'todos', emoji: '❀', desc: 'Aceite de jojoba 100% puro, apto para todo tipo de piel.', extraDesc: 'Mezclar con crema habitual o aplicar solo en las noches.', stock: 80, img: 'img/11.png' },
-  { id: 12, name: 'Protector Solar SPF50', price: 115, cat: 'todos', emoji: '☼', desc: 'Protección mineral con zinc + activos botánicos.', extraDesc: 'No deja residuo blanco. Fórmula invisible y ligera.', stock: 65, img: 'img/12.png' }
-];
+let products = [];
 
 let cart = [], orders = [], quizAnswers = {}, currentStep = 0, heroCarIdx = 0, nosCarIdx = 0;
 let editingProductId = null, editingProductImg = null;
@@ -55,6 +42,79 @@ let quizData = [
 ];
 
 const catLabels = { seca: 'Piel Seca', grasa: 'Piel Grasa', mixta: 'Piel Mixta', sensible: 'Piel Sensible', madura: 'Piel Madura', todos: 'Todo Tipo' };
+
+// ══ BASE DE DATOS EN GITHUB (data.json) ══
+let githubToken = '';
+
+async function saveData() {
+  if (!githubToken) {
+    console.warn('No hay token de GitHub, no se guardará en el repositorio.');
+    return;
+  }
+  
+  showToast('Sincronizando con GitHub...');
+  const db = { products, orders, quizData, aboutCards, heroSlides, nosSlides, socialLinks, locationData, waNumber, qrImageSrc };
+  const content = JSON.stringify(db, null, 2);
+  
+  // Codificación segura a Base64 para caracteres especiales (tildes, etc.)
+  const base64Content = btoa(unescape(encodeURIComponent(content)));
+  
+  try {
+    // 1. Obtener el SHA actual del archivo data.json en GitHub
+    const getRes = await fetch('https://api.github.com/repos/marck028/MADAME/contents/data.json', {
+      headers: { 'Authorization': `token ${githubToken}` }
+    });
+    
+    if (!getRes.ok) throw new Error('No se pudo obtener data.json del repositorio.');
+    const getJson = await getRes.json();
+    
+    // 2. Hacer el commit con la nueva información
+    const putRes = await fetch('https://api.github.com/repos/marck028/MADAME/contents/data.json', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${githubToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Actualización automática de base de datos desde panel admin',
+        content: base64Content,
+        sha: getJson.sha
+      })
+    });
+    
+    if (putRes.ok) {
+      showToast('¡Guardado en GitHub exitosamente! ✓ (Tardará 1-2 min en verse online)');
+    } else {
+      showToast('Error al guardar en GitHub ✗');
+      console.error(await putRes.json());
+    }
+  } catch (e) {
+    console.error(e);
+    showToast('Error de conexión con GitHub ✗');
+  }
+}
+
+async function loadData() {
+  try {
+    // Obtenemos data.json de la misma carpeta. Se le agrega t para evitar caché agresivo.
+    const res = await fetch('data.json?t=' + Date.now());
+    if (res.ok) {
+      const db = await res.json();
+      if (db.products) products = db.products;
+      if (db.orders) orders = db.orders;
+      if (db.quizData) quizData = db.quizData;
+      if (db.aboutCards) aboutCards = db.aboutCards;
+      if (db.heroSlides) heroSlides = db.heroSlides;
+      if (db.nosSlides) nosSlides = db.nosSlides;
+      if (db.socialLinks) socialLinks = db.socialLinks;
+      if (db.locationData) locationData = db.locationData;
+      if (db.waNumber) waNumber = db.waNumber;
+      if (db.qrImageSrc) qrImageSrc = db.qrImageSrc;
+    }
+  } catch(e) { 
+    console.error('Error cargando data.json. Usando datos por defecto.', e); 
+  }
+}
 
 // ══ NAV ══
 function showSection(id) {
@@ -175,6 +235,7 @@ function confirmOrderWA() {
   else { const dept = document.getElementById('departamento').value; const cd = document.getElementById('ciudadDept').value; entregaInfo = `❐ Envío a ${dept} / ${cd} (costo a convenir)`; }
   const msg = encodeURIComponent(`❀ *MADAME NATURAL — Pedido*\n\n◉ *Cliente:* ${nombre}\n◆ *Ciudad:* ${ciudad}\n◈ *CI:* ${ci}\n✆ *Tel:* ${telefono}\n\n❐ *Entrega:* ${entregaInfo}\n\n*Productos:*\n${items}\n\n◆ *Subtotal:* Bs. ${sub}\n\nAdjunto el comprobante de pago. ¡Muchas gracias! ✦`);
   orders.unshift({ id: `#${String(orders.length + 1).padStart(3, '0')}`, cliente: nombre, total: `Bs. ${sub}`, entrega: entregaInfo, estado: 'Pendiente', fecha: new Date().toISOString().split('T')[0], ciudad, ci, productos: cart.map(i => `${i.name} x${i.qty}`).join(', ') });
+  saveData();
   window.open(`https://wa.me/${waNumber.replace(/\D/g, '')}?text=${msg}`, '_blank');
   cart = []; updateCartCount(); showToast('¡Pedido enviado a WhatsApp! ✦');
 }
@@ -194,15 +255,31 @@ function sendResultsWA() { const skin = quizAnswers[0] || 'mixta'; const msg = e
 function renderHomeAboutStrip() { document.getElementById('homeAboutStrip').innerHTML = aboutCards.map(c => `<div class="home-about-card"><span class="home-about-icon">${c.icon}</span><h3 class="home-about-title">${c.title}</h3><p class="home-about-text">${c.text}</p></div>`).join(''); }
 
 // ══ ADMIN AUTH ══
-function adminLogin() {
+async function adminLogin() {
   const user = document.getElementById('adminUser').value.trim();
-  const pass = document.getElementById('adminPass').value;
-  if (user === 'Daniela madame' && pass === 'madam$') {
-    document.getElementById('adminLogin').style.display = 'none';
-    document.getElementById('adminPanel').classList.add('visible');
-    renderAdminDashboard(); renderAdminProducts(); renderAdminOrders(); renderQuizAdminEditor(); renderAboutCardsEditor(); renderHeroSlidesEditor(); renderNosSlidesEditor();
-    loadSocialAdminFields(); loadLocationAdminFields();
-  } else { showToast('Credenciales incorrectas'); }
+  const token = document.getElementById('adminPass').value.trim();
+  
+  if (user === 'Daniela madame' && token.startsWith('ghp_')) {
+    // Validamos que el token funcione haciendo un request de prueba
+    try {
+      showToast('Validando Token...');
+      const res = await fetch('https://api.github.com/user', {
+        headers: { 'Authorization': `token ${token}` }
+      });
+      if (res.ok) {
+        githubToken = token;
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('visible');
+        renderAdminDashboard(); renderAdminProducts(); renderAdminOrders(); renderQuizAdminEditor(); renderAboutCardsEditor(); renderHeroSlidesEditor(); renderNosSlidesEditor();
+        loadSocialAdminFields(); loadLocationAdminFields();
+        showToast('Autenticado correctamente ✓');
+      } else {
+        showToast('Token de GitHub inválido ✗');
+      }
+    } catch(e) {
+      showToast('Error de conexión ✗');
+    }
+  } else { showToast('Ingresa tu Token de GitHub (inicia con ghp_)'); }
 }
 function adminLogout() { document.getElementById('adminLogin').style.display = 'flex'; document.getElementById('adminPanel').classList.remove('visible'); document.getElementById('adminUser').value = ''; document.getElementById('adminPass').value = ''; }
 function showAdminSection(id, btn) { document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active')); document.getElementById(`sec-${id}`).classList.add('active'); document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
@@ -217,17 +294,18 @@ function renderAdminOrders() { document.getElementById('pedidosTbody').innerHTML
 
 // ══ QUIZ ADMIN ══
 function renderQuizAdminEditor() { document.getElementById('quizAdminEditor').innerHTML = quizData.map((q, qi) => `<div class="admin-block"><div class="form-group"><label class="form-label">Pregunta ${qi + 1}</label><input type="text" class="form-input" id="quizQ${qi}" value="${q.question}"></div><label class="form-label" style="margin-bottom:0.45rem;display:block;">Opciones (Texto | Valor)</label>${q.options.map((o, oi) => `<div style="display:grid;grid-template-columns:2fr 1fr;gap:0.45rem;margin-bottom:0.45rem;"><input type="text" class="form-input" id="quizOpt${qi}_${oi}" value="${o.text}" style="font-size:0.75rem;"><input type="text" class="form-input" id="quizOptVal${qi}_${oi}" value="${o.val}" style="font-size:0.75rem;" placeholder="valor"></div>`).join('')}</div>`).join(''); }
-function saveQuizFromAdmin() { quizData = quizData.map((q, qi) => ({ question: document.getElementById(`quizQ${qi}`).value, options: q.options.map((_, oi) => ({ text: document.getElementById(`quizOpt${qi}_${oi}`).value, val: document.getElementById(`quizOptVal${qi}_${oi}`).value })) })); showToast('Quiz actualizado ✓'); }
+function saveQuizFromAdmin() { quizData = quizData.map((q, qi) => ({ question: document.getElementById(`quizQ${qi}`).value, options: q.options.map((_, oi) => ({ text: document.getElementById(`quizOpt${qi}_${oi}`).value, val: document.getElementById(`quizOptVal${qi}_${oi}`).value })) })); saveData(); showToast('Quiz actualizado ✓'); }
 
 // ══ ABOUT CARDS ══
 function renderAboutCardsEditor() { document.getElementById('aboutCardsEditor').innerHTML = aboutCards.map((c, i) => `<div style="display:grid;grid-template-columns:55px 1fr 2fr;gap:0.65rem;margin-bottom:0.65rem;align-items:center;"><input type="text" class="form-input" id="cardIcon${i}" value="${c.icon}" style="text-align:center;font-size:1.15rem;padding:0.5rem;"><input type="text" class="form-input" id="cardTitle${i}" value="${c.title}" placeholder="Título"><input type="text" class="form-input" id="cardText${i}" value="${c.text}" placeholder="Descripción"></div>`).join(''); }
-function saveAboutCards() { aboutCards = aboutCards.map((_, i) => ({ icon: document.getElementById(`cardIcon${i}`).value, title: document.getElementById(`cardTitle${i}`).value, text: document.getElementById(`cardText${i}`).value })); renderHomeAboutStrip(); showToast('Tarjetas actualizadas ✓'); }
+function saveAboutCards() { aboutCards = aboutCards.map((_, i) => ({ icon: document.getElementById(`cardIcon${i}`).value, title: document.getElementById(`cardTitle${i}`).value, text: document.getElementById(`cardText${i}`).value })); saveData(); renderHomeAboutStrip(); showToast('Tarjetas actualizadas ✓'); }
 
 // ══ SOCIAL ADMIN ══
 function loadSocialAdminFields() { document.getElementById('adminInstagram').value = socialLinks.instagram; document.getElementById('adminFacebook').value = socialLinks.facebook; document.getElementById('adminTiktok').value = socialLinks.tiktok; }
 function saveSocial(net) {
   const val = document.getElementById('admin' + net.charAt(0).toUpperCase() + net.slice(1)).value.trim();
   socialLinks[net] = val;
+  saveData();
   const el = document.getElementById('link' + net.charAt(0).toUpperCase() + net.slice(1));
   if (el && val) el.href = val;
   showToast(`${net} guardado ✓`);
@@ -254,6 +332,7 @@ function saveLocation() {
   document.getElementById('locationRef').textContent = locationData.ref;
   if (locationData.mapUrl) document.getElementById('locationMapLink').href = locationData.mapUrl;
   document.getElementById('footerAddress').textContent = '◆ ' + locationData.street;
+  saveData();
   showToast('Ubicación actualizada ✓');
 }
 function uploadMapImg(input) {
@@ -261,6 +340,7 @@ function uploadMapImg(input) {
   const r = new FileReader();
   r.onload = e => {
     locationData.mapImg = e.target.result;
+    saveData();
     document.getElementById('locationMapArea').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
     const prev = document.getElementById('mapImgPreviewAdmin'); prev.src = e.target.result; prev.style.display = 'block';
     showToast('Croquis actualizado ✓');
@@ -285,12 +365,13 @@ function saveProduct() {
   const data = { name, price, cat: document.getElementById('pCat').value, stock: +document.getElementById('pStock').value, emoji: document.getElementById('pEmoji').value || '❀', desc: document.getElementById('pDesc').value, extraDesc: document.getElementById('pExtraDesc').value, img: editingProductImg };
   if (editingProductId) { const p = products.find(x => x.id === editingProductId); Object.assign(p, data); const ci = cart.find(x => x.id === editingProductId); if (ci) Object.assign(ci, data); showToast('Producto actualizado ✓'); }
   else { products.push({ id: Date.now(), ...data, badge: null }); showToast('Producto agregado ✓'); }
+  saveData();
   renderAdminProducts(); renderAdminDashboard(); closeModal();
 }
-function deleteProduct(id) { if (confirm('¿Eliminar este producto?')) { products = products.filter(p => p.id !== id); cart = cart.filter(i => i.id !== id); updateCartCount(); renderAdminProducts(); renderAdminDashboard(); showToast('Producto eliminado'); } }
+function deleteProduct(id) { if (confirm('¿Eliminar este producto?')) { products = products.filter(p => p.id !== id); cart = cart.filter(i => i.id !== id); updateCartCount(); saveData(); renderAdminProducts(); renderAdminDashboard(); showToast('Producto eliminado'); } }
 
 // ══ CONTENT ══
-function uploadQR(input) { const file = input.files[0]; if (!file) return; const r = new FileReader(); r.onload = e => { qrImageSrc = e.target.result; const p = document.getElementById('qrPreviewAdmin'); p.src = e.target.result; p.style.display = 'block'; showToast('QR actualizado ✓'); }; r.readAsDataURL(file); }
+function uploadQR(input) { const file = input.files[0]; if (!file) return; const r = new FileReader(); r.onload = e => { qrImageSrc = e.target.result; saveData(); const p = document.getElementById('qrPreviewAdmin'); p.src = e.target.result; p.style.display = 'block'; showToast('QR actualizado ✓'); }; r.readAsDataURL(file); }
 function uploadHeroSlide(input, idx) { const file = input.files[0]; if (!file) return; const r = new FileReader(); r.onload = e => { const sl = document.getElementById(`heroSlide${idx}`); if (sl) { sl.innerHTML = ''; const img = document.createElement('img'); img.src = e.target.result; img.style.cssText = 'width:100%;height:100%;object-fit:cover;'; sl.appendChild(img); } const prev = document.getElementById(`heroSlidePreview${idx}`); if (prev) { prev.src = e.target.result; prev.style.display = 'block'; } showToast(`Slide ${idx + 1} actualizado ✓`); initHeroCarousel(); }; r.readAsDataURL(file); }
 
 // ══ HERO SLIDES EDITOR (hasta 5) ══
@@ -322,6 +403,7 @@ function saveHeroSlides() {
     const ic = document.getElementById('hsIcon' + i), tx = document.getElementById('hsText' + i);
     return { type: 'quote', icon: ic ? ic.value : sl.icon, text: tx ? tx.value : sl.text, img: sl.img || null };
   });
+  saveData();
   renderHeroCarousel(); showToast('Carrusel de Inicio actualizado ✓');
 }
 
@@ -353,15 +435,20 @@ function saveNosSlides() {
     author: document.getElementById('nsAuthor' + i).value,
     img: sl.img || null
   }));
+  saveData();
   renderNosCarousel(); showToast('Carrusel de Nosotros actualizado ✓');
 }
-function saveWA() { waNumber = document.getElementById('waNumber').value; document.getElementById('footerWA').textContent = '✆ WhatsApp: ' + waNumber; showToast('WhatsApp guardado ✓'); }
+function saveWA() { waNumber = document.getElementById('waNumber').value; saveData(); document.getElementById('footerWA').textContent = '✆ WhatsApp: ' + waNumber; showToast('WhatsApp guardado ✓'); }
 
 // ══ TOAST ══
 function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
 
 // ══ INIT ══
-renderProducts();
-renderHeroCarousel();
-renderHomeAboutStrip();
-updateOrderSummary();
+async function initApp() {
+  await loadData();
+  renderProducts();
+  renderHeroCarousel();
+  renderHomeAboutStrip();
+  updateOrderSummary();
+}
+initApp();

@@ -1,0 +1,315 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Sérum Hidratante Intenso",
+      "price": 120,
+      "cat": "seca",
+      "emoji": "❋",
+      "desc": "Ácido hialurónico + aloe vera para hidratación profunda de 72h.",
+      "extraDesc": "Aplicar 2-3 gotas sobre el rostro limpio. Ideal para uso nocturno.",
+      "stock": 45,
+      "badge": "Bestseller",
+      "img": "img/1.png"
+    },
+    {
+      "id": 2,
+      "name": "Crema Nutritiva de Argán",
+      "price": 165,
+      "cat": "seca",
+      "emoji": "❀",
+      "desc": "Aceite de argán puro con manteca de karité para nutrir pieles secas.",
+      "extraDesc": "Rica en vitamina E y ácidos grasos esenciales.",
+      "stock": 30,
+      "img": "img/2.png"
+    },
+    {
+      "id": 3,
+      "name": "Sérum Control Sebo",
+      "price": 110,
+      "cat": "grasa",
+      "emoji": "❀",
+      "desc": "Niacinamida + zinc para regular el exceso de grasa y minimizar poros.",
+      "extraDesc": "Fórmula ligera de rápida absorción. Libre de aceites.",
+      "stock": 60,
+      "badge": "Nuevo",
+      "img": "img/3.png"
+    },
+    {
+      "id": 4,
+      "name": "Tónico Poros Invisibles",
+      "price": 95,
+      "cat": "grasa",
+      "emoji": "✦",
+      "desc": "Ácido salicílico natural + té verde para piel fresca y sin brillo.",
+      "extraDesc": "Aplicar con algodón por las mañanas.",
+      "stock": 40,
+      "img": "img/4.png"
+    },
+    {
+      "id": 5,
+      "name": "Crema Equilibrante",
+      "price": 130,
+      "cat": "mixta",
+      "emoji": "◈",
+      "desc": "Fórmula bifásica que hidrata zonas secas y controla la zona T.",
+      "extraDesc": "Para mejores resultados, usar mañana y noche.",
+      "stock": 25,
+      "img": "img/5.png"
+    },
+    {
+      "id": 6,
+      "name": "Mascarilla Purificante",
+      "price": 85,
+      "cat": "mixta",
+      "emoji": "❧",
+      "desc": "Arcilla kaolín + carbón activado para limpieza profunda semanal.",
+      "extraDesc": "Aplicar 1-2 veces por semana durante 10 minutos.",
+      "stock": 55,
+      "img": "img/6.png"
+    },
+    {
+      "id": 7,
+      "name": "Sérum Calmante de Rosa",
+      "price": 155,
+      "cat": "sensible",
+      "emoji": "✿",
+      "desc": "Rosa mosqueta + centella asiática para pieles reactivas.",
+      "extraDesc": "Sin fragancia, sin colorantes. Dermatológicamente probado.",
+      "stock": 20,
+      "badge": "Favorito",
+      "img": "img/7.png"
+    },
+    {
+      "id": 8,
+      "name": "Crema Barrera Protectora",
+      "price": 140,
+      "cat": "sensible",
+      "emoji": "◆",
+      "desc": "Ceramidas + péptidos para reforzar la barrera cutánea natural.",
+      "extraDesc": "Especial para pieles post-tratamiento.",
+      "stock": 35,
+      "img": "img/8.png"
+    },
+    {
+      "id": 9,
+      "name": "Retinol Suave Nocturno",
+      "price": 175,
+      "cat": "madura",
+      "emoji": "☾",
+      "desc": "Retinol encapsulado 0.3% + vitamina E para regenerar mientras duermes.",
+      "extraDesc": "Usar solo de noche. Aplicar protector solar al día siguiente.",
+      "stock": 18,
+      "badge": "Premium",
+      "img": "img/9.png"
+    },
+    {
+      "id": 10,
+      "name": "Crema Antioxidante Lumière",
+      "price": 195,
+      "cat": "madura",
+      "emoji": "✦",
+      "desc": "Vitamina C estabilizada + resveratrol para luminosidad y firmeza.",
+      "extraDesc": "Protege contra radicales libres y polución ambiental.",
+      "stock": 22,
+      "img": "img/10.png"
+    },
+    {
+      "id": 11,
+      "name": "Aceite Facial de Jojoba",
+      "price": 90,
+      "cat": "todos",
+      "emoji": "❀",
+      "desc": "Aceite de jojoba 100% puro, apto para todo tipo de piel.",
+      "extraDesc": "Mezclar con crema habitual o aplicar solo en las noches.",
+      "stock": 80,
+      "img": "img/11.png"
+    },
+    {
+      "id": 12,
+      "name": "Protector Solar SPF50",
+      "price": 115,
+      "cat": "todos",
+      "emoji": "☼",
+      "desc": "Protección mineral con zinc + activos botánicos.",
+      "extraDesc": "No deja residuo blanco. Fórmula invisible y ligera.",
+      "stock": 65,
+      "img": "img/12.png"
+    }
+  ],
+  "orders": [],
+  "quizData": [
+    {
+      "question": "¿Cómo describes tu tipo de piel generalmente?",
+      "options": [
+        {
+          "text": "Tirante, escamosa o áspera",
+          "val": "seca"
+        },
+        {
+          "text": "Brillante, con poros dilatados",
+          "val": "grasa"
+        },
+        {
+          "text": "Grasa en zona T, seca en mejillas",
+          "val": "mixta"
+        },
+        {
+          "text": "Se irrita o enrojece fácilmente",
+          "val": "sensible"
+        },
+        {
+          "text": "Muestra líneas de expresión y pérdida de firmeza",
+          "val": "madura"
+        }
+      ]
+    },
+    {
+      "question": "¿Cuál es tu principal preocupación de piel?",
+      "options": [
+        {
+          "text": "Falta de hidratación",
+          "val": "hidra"
+        },
+        {
+          "text": "Acné o imperfecciones",
+          "val": "acne"
+        },
+        {
+          "text": "Manchas o tono desigual",
+          "val": "manchas"
+        },
+        {
+          "text": "Envejecimiento prematuro",
+          "val": "anti"
+        }
+      ]
+    },
+    {
+      "question": "¿Qué rutina sigues actualmente?",
+      "options": [
+        {
+          "text": "Ninguna, empiezo desde cero",
+          "val": "ninguna"
+        },
+        {
+          "text": "Solo limpieza y crema",
+          "val": "basica"
+        },
+        {
+          "text": "Tengo una rutina completa",
+          "val": "completa"
+        },
+        {
+          "text": "Uso activos como vitamina C o retinol",
+          "val": "activos"
+        }
+      ]
+    },
+    {
+      "question": "¿Cuánto tiempo dedicas a tu rutina diaria?",
+      "options": [
+        {
+          "text": "5 minutos — quiero algo rápido",
+          "val": "5min"
+        },
+        {
+          "text": "15 minutos — busco equilibrio",
+          "val": "15min"
+        },
+        {
+          "text": "30+ minutos — disfruto el ritual",
+          "val": "30min"
+        }
+      ]
+    }
+  ],
+  "aboutCards": [
+    {
+      "icon": "❀",
+      "title": "100% Natural",
+      "text": "Ingredientes botánicos seleccionados con rigor científico para garantizar pureza y eficacia."
+    },
+    {
+      "icon": "♺",
+      "title": "Sostenible",
+      "text": "Envases eco-friendly y fórmulas cruelty-free. Belleza que cuida el planeta."
+    },
+    {
+      "icon": "✦",
+      "title": "Asesoramiento",
+      "text": "Cada clienta recibe una guía personalizada para construir su rutina ideal."
+    }
+  ],
+  "heroSlides": [
+    {
+      "type": "logo"
+    },
+    {
+      "type": "quote",
+      "icon": "❀",
+      "text": "\"La naturaleza tiene la mejor respuesta para tu piel\"",
+      "img": null
+    },
+    {
+      "type": "quote",
+      "icon": "✿",
+      "text": "\"Ingredientes puros, resultados extraordinarios\"",
+      "img": null
+    },
+    {
+      "type": "quote",
+      "icon": "❧",
+      "text": "\"Belleza consciente, ritual diario\"",
+      "img": null
+    },
+    {
+      "type": "quote",
+      "icon": "✦",
+      "text": "\"Cada gota celebra tu esencia natural\"",
+      "img": null
+    }
+  ],
+  "nosSlides": [
+    {
+      "icon": "❀",
+      "quote": "\"La verdadera belleza nace del equilibrio entre naturaleza y ciencia\"",
+      "author": "— Fundadora, Madame Natural"
+    },
+    {
+      "icon": "✿",
+      "quote": "\"Ingredientes puros, resultados extraordinarios, siempre sostenibles\"",
+      "author": "— Nuestra Filosofía"
+    },
+    {
+      "icon": "❧",
+      "quote": "\"Cada producto es una promesa: respetamos tu piel y el medio ambiente\"",
+      "author": "— Compromiso Madame Natural"
+    },
+    {
+      "icon": "✦",
+      "quote": "\"Rituales botánicos para revelar tu mejor versión\"",
+      "author": "— Nuestra Visión"
+    },
+    {
+      "icon": "◈",
+      "quote": "\"Lujo natural, hecho a mano con dedicación artesanal\"",
+      "author": "— Esencia Madame"
+    }
+  ],
+  "socialLinks": {
+    "instagram": "",
+    "facebook": "",
+    "tiktok": ""
+  },
+  "locationData": {
+    "title": "Encuéntranos",
+    "street": "Av. Ejemplo #123, Cochabamba",
+    "hours": "Lun – Sáb: 9:00 – 20:00",
+    "ref": "A media cuadra del parque principal",
+    "mapUrl": "",
+    "mapImg": null
+  },
+  "waNumber": "+59171234567",
+  "qrImageSrc": null
+}
